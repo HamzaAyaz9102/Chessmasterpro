@@ -1,0 +1,402 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional Openings Trainer - ChessMaster Pro</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="https://unpkg.com/@chrisoakman/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://unpkg.com/@chrisoakman/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.2/chess.min.js"></script>
+
+    <style>
+        :root { --light-square-bg: #f0d9b5; --dark-square-bg: #b58863; }
+        body { font-family: 'Poppins', sans-serif; background-color: #1a1a1a; color: #f0f0f0; }
+        .sidebar { background-color: #2a2a2a; }
+        .opening-category, .sub-opening-item { cursor: pointer; transition: background-color 0.2s; }
+        .opening-category:hover, .sub-opening-item:hover, .sub-opening-item.active { background-color: #4a4a4a; }
+        .sub-opening-item { background-color: #3a3a3a; margin-left: 1rem; }
+        .opening-category.expanded { background-color: #4a4a4a; }
+        .move-nav button { background-color: #4a4a4a; padding: 0.5rem 1rem; border-radius: 0.5rem; transition: background-color 0.2s; }
+        .move-nav button:hover:not(:disabled) { background-color: #6a6a6a; }
+        .move-nav button:disabled { opacity: 0.4; cursor: not-allowed; }
+
+        #boardWrapper { position: relative; width: 100%; aspect-ratio: 1 / 1; max-width: 700px; margin: auto; }
+        #board { width: 100%; height: 100%; }
+        .square-55d63 { background-color: var(--dark-square-bg) !important; }
+        .white-1e1d7 { background-color: var(--light-square-bg) !important; }
+        
+        #arrowCanvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: auto; }
+        
+        .move-avatar {
+            position: absolute;
+            z-index: 100;
+            font-size: 1.75rem;
+            opacity: 0;
+            transform: translate(-50%, -50%) scale(0.5);
+            pointer-events: none;
+            text-shadow: 0 0 5px rgba(0,0,0,0.9);
+            animation: fadeInScale 0.3s forwards, fadeOut 0.5s 1.5s forwards;
+            line-height: 1;
+        }
+        @keyframes fadeInScale { from { opacity: 0; transform: translate(-50%, -50%) scale(0.5); } to { opacity: 1; transform: translate(-50%, -50%) scale(1); } }
+        @keyframes fadeOut { from { opacity: 1; } to { opacity: 0; } }
+
+        .clock-wrapper { position: absolute; bottom: -60px; left: 0; right: 0; }
+        .fide-clock { display: flex; gap: 10px; background: #222; padding: 5px; border-radius: 5px; border: 2px solid #444; width: 220px; margin: auto; }
+        .fide-clock .time { font-family: 'Courier New', monospace; font-size: 1.5rem; background: #111; padding: 5px 10px; border-radius: 3px; width: 100px; text-align: center; }
+        
+        .theme-btn.active, .piece-btn.active { border: 2px solid #ffd700; }
+        .spinner { border: 2px solid rgba(255,255,255,0.3); border-top: 2px solid #fff; border-radius: 50%; width: 16px; height: 16px; animation: spin 1s linear infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body class="antialiased">
+    <header class="bg-gray-900/50 backdrop-blur-sm sticky top-0 z-50 border-b border-gray-700/50">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="index.html" class="text-2xl font-bold text-white flex items-center"><i class="fas fa-chess-knight text-yellow-400 mr-2"></i> ChessMaster Pro</a>
+            <div class="hidden md:flex items-center space-x-8">
+                <a href="puzzles.html" class="text-gray-300 hover:text-yellow-400">Puzzles</a>
+                <a href="openings.html" class="text-yellow-400 border-b-2 border-yellow-400 font-bold">Openings</a>
+                <a href="progress.html" class="text-gray-300 hover:text-yellow-400">Progress</a>
+                <a href="premium.html" class="text-gray-300 hover:text-yellow-400">Premium</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="flex flex-col md:flex-row h-[calc(100vh-68px)]">
+        <aside class="sidebar w-full md:w-1/4 lg:w-1/5 p-4 overflow-y-auto">
+            <h2 class="text-xl font-bold text-white mb-4">Openings</h2>
+            <input type="text" id="searchOpening" placeholder="Search..." class="w-full bg-gray-700 text-white p-2 rounded-md mb-4 border border-gray-600 focus:ring-2 focus:ring-yellow-400 focus:outline-none">
+            <ul id="openingsList" class="space-y-1"></ul>
+            
+            <h2 class="text-xl font-bold text-white mt-8 mb-4">Customize</h2>
+            <div class="space-y-4">
+                <div>
+                    <label class="font-semibold text-sm">Board Texture</label>
+                    <div class="grid grid-cols-2 gap-2 mt-2">
+                        <button class="theme-btn p-2 rounded text-xs active" data-theme="wood">Wood</button>
+                        <button class="theme-btn p-2 rounded text-xs" data-theme="marble">Marble</button>
+                    </div>
+                </div>
+                 <div>
+                    <label class="font-semibold text-sm">Piece Style</label>
+                    <div class="grid grid-cols-2 gap-2 mt-2">
+                        <button class="piece-btn p-2 rounded text-xs active" data-style="wiki">Wikipedia</button>
+                        <button class="piece-btn p-2 rounded text-xs" data-style="merida">Merida</button>
+                    </div>
+                </div>
+                 <div>
+                     <button id="clearArrowsBtn" class="w-full mt-4 bg-red-600 text-white font-semibold py-2 rounded-lg hover:bg-red-500 transition-colors"><i class="fas fa-trash mr-2"></i> Clear Arrows</button>
+                </div>
+            </div>
+        </aside>
+
+        <div class="flex-1 p-6 flex flex-col lg:flex-row gap-8 overflow-y-auto">
+            <div class="w-full lg:w-1/2 flex flex-col items-center">
+                <div id="boardWrapper">
+                    <div id="board"></div>
+                    <svg id="arrowCanvas"></svg>
+                </div>
+                 <div class="clock-wrapper">
+                    <div class="fide-clock">
+                        <div id="whiteClock" class="time">5:00</div>
+                        <div id="blackClock" class="time">5:00</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lg:w-1/2 bg-gray-900 p-6 rounded-xl border border-gray-700/50 flex flex-col">
+                <div class="flex-grow">
+                    <h3 id="openingName" class="text-2xl font-bold text-yellow-400">Ruy Lopez</h3>
+                    <div id="status" class="text-center font-semibold p-2 rounded-lg bg-green-800/50 text-green-300 my-4 hidden">
+                        <i class="fas fa-brain mr-2"></i> Theory Complete. Explore Freely!
+                    </div>
+                    <div class="bg-gray-800 p-4 rounded-lg mb-4">
+                        <h4 class="font-semibold text-white mb-2">Move History (PGN):</h4>
+                        <div id="pgn" class="text-gray-300 text-sm h-20 overflow-y-auto font-mono"></div>
+                    </div>
+                    <div id="aiCoachPanel" class="bg-indigo-900/50 p-4 rounded-lg border border-indigo-700">
+                        <div class="flex items-start">
+                            <img src="https://placehold.co/40x40/312e81/a5b4fc?text=AI" class="w-10 h-10 rounded-full mr-4 border-2 border-indigo-400 flex-shrink-0" alt="AI Coach Avatar">
+                            <div>
+                                <h4 class="font-bold text-indigo-100">AI Coach Gemini</h4>
+                                <p id="aiCoachText" class="text-indigo-200 text-sm mt-1">Welcome! Select an opening to begin.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex items-center justify-between mt-auto pt-4 border-t border-gray-700">
+                    <div class="move-nav flex gap-2">
+                        <button id="resetBtn" title="Start Over"><i class="fas fa-undo"></i></button>
+                        <button id="prevBtn" title="Previous Move"><i class="fas fa-chevron-left"></i></button>
+                        <button id="nextBtn" title="Next Move"><i class="fas fa-chevron-right"></i></button>
+                    </div>
+                     <button id="analysisBtn" class="bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-500 transition-colors duration-300 flex items-center">
+                        <i class="fas fa-search-plus mr-2"></i> Full Analysis
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        $(window).on('load', function() {
+            // --- CORE VARIABLES ---
+            let board = null;
+            let game = new Chess();
+            let currentOpeningKey = null;
+            let moveHistory = [];
+            let currentMoveIndex = -1;
+            let exploreMode = false;
+            let isDrawing = false;
+            let startSquare = null;
+            let pieceStyle = 'wiki';
+            let clockInterval = null;
+            let whiteTime = 300;
+            let blackTime = 300;
+            
+            // --- PIECE THEMES ---
+            const pieceThemes = {
+                wiki: (piece) => `https://chessboardjs.com/img/chesspieces/wikipedia/${piece}.png`,
+                merida: (piece) => `https://chessboardjs.com/img/chesspieces/merida/${piece}.png`
+            };
+
+            // --- DEEP OPENING DATABASE ---
+            const openingsData = {
+                'e4': {
+                    name: "King's Pawn (1. e4)",
+                    variations: {
+                        'ruy-lopez': { name: 'Ruy Lopez', moves: [{ san: 'e4', text: 'White starts with the most popular move, controlling the center and opening lines for the Queen and Bishop.' }, { san: 'e5', text: 'Black responds symmetrically, challenging for central control.' }, { san: 'Nf3', text: 'White develops a knight and attacks Black\'s weak e5-pawn.' }, { san: 'Nc6', text: 'Black develops their own knight, defending the pawn.' }, { san: 'Bb5', text: 'The Ruy Lopez. This move puts pressure on the knight which defends e5, creating complex strategic possibilities.' }], analysis: { 'a6': 'best', 'Nf6': 'great', 'd6': 'good' } },
+                        'italian-game': { name: 'Italian Game', moves: [{ san: 'e4' }, { san: 'e5' }, { san: 'Nf3' }, { san: 'Nc6' }, { san: 'Bc4', text: 'The Italian Game, or "Giuoco Piano" (Quiet Game), leads to more strategic and less tactical positions than the Ruy Lopez.' }], analysis: {'Bc5':'best', 'Nf6':'great'} },
+                        'sicilian-najdorf': { name: 'Sicilian: Najdorf', moves: [{ san: 'e4' }, { san: 'c5', text: 'Black chooses the Sicilian Defense, creating an imbalance.' }, { san: 'Nf3' }, { san: 'd6' }, { san: 'd4', text: 'White challenges the center immediately.' }, { san: 'cxd4' }, { san: 'Nxd4' }, { san: 'Nf6' }, { san: 'Nc3' }, { san: 'a6', text: 'The Najdorf Variation. Black prevents Nb5 and prepares to expand on the queenside. This is one of the sharpest and most studied openings.' }], analysis: {'Be3':'best', 'Bg5':'great'} },
+                    }
+                },
+                'd4': {
+                    name: "Queen's Pawn (1. d4)",
+                    variations: {
+                        'qgd': { name: "Queen's Gambit Declined", moves: [{ san: 'd4' }, { san: 'd5' }, { san: 'c4', text: 'White offers the Queen\'s Gambit, sacrificing a pawn for central control.' }, { san: 'e6', text: "Black declines the gambit with a solid move, reinforcing the d5 pawn." }], analysis: {'Nc3':'best', 'Nf3':'great'} },
+                        'nimzo-indian': { name: 'Nimzo-Indian Defense', moves: [{ san: 'd4' }, { san: 'Nf6' }, { san: 'c4' }, { san: 'e6' }, { san: 'Nc3' }, { san: 'Bb4', text: 'A highly respected defense. Black pins the knight, preventing e4 and fighting for control of the dark squares.' }], analysis: {'Qc2':'best', 'e3':'great'} },
+                        'slav-defense': { name: 'Slav Defense', moves: [{ san: 'd4' }, { san: 'd5' }, { san: 'c4' }, { san: 'c6', text: 'Similar to the QGD, but by playing ...c6, Black keeps the light-squared bishop\'s diagonal open.' }], analysis: { 'Nf3':'best', 'Nc3':'great'} }
+                    }
+                },
+            };
+
+            const moveQualityIcons = { book: {icon: '📖', color: 'text-sky-300'}, best: {icon: '⭐', color: 'text-green-400'}, brilliant: {icon: '💎', color: 'text-cyan-400'}, great: {icon: '👍', color: 'text-blue-400'}, inaccuracy: {icon: '🤔', color: 'text-yellow-400'}, mistake: {icon: '❓', color: 'text-orange-400'}, blunder: {icon: '❗', color: 'text-red-500'} };
+
+            // --- UI & DOM REFERENCES ---
+            const arrowCanvas = $('#arrowCanvas');
+            const boardElement = $('#board');
+
+            // --- DRAWING LOGIC ---
+            function getSquareFromCoordinates(x, y) {
+                const boardRect = boardElement.get(0).getBoundingClientRect();
+                const squareSize = boardRect.width / 8;
+                const file = Math.floor((x - boardRect.left) / squareSize);
+                const rank = 7 - Math.floor((y - boardRect.top) / squareSize);
+                if (file < 0 || file > 7 || rank < 0 || rank > 7) return null;
+                return 'abcdefgh'[file] + (rank + 1);
+            }
+            
+            function getSquareCenter(square) {
+                const file = 'abcdefgh'.indexOf(square[0]);
+                const rank = parseInt(square[1], 10) - 1;
+                const squareSize = boardElement.width() / 8;
+                return { x: file * squareSize + squareSize / 2, y: (7 - rank) * squareSize + squareSize / 2 };
+            }
+            
+            function drawArrow(from, to) {
+                 const fromPoint = getSquareCenter(from);
+                 const toPoint = getSquareCenter(to);
+                 const fromPiece = game.get(from);
+                 let path;
+                 if (fromPiece && fromPiece.type === 'n') {
+                    path = document.createElementNS("http://www.w3.org/2000/svg", "polyline");
+                    const fileDiff = Math.abs(from.charCodeAt(0) - to.charCodeAt(0));
+                    let midPointX, midPointY;
+                    if (fileDiff === 1) { midPointX = fromPoint.x; midPointY = toPoint.y; } 
+                    else { midPointX = toPoint.x; midPointY = fromPoint.y; }
+                    path.setAttribute("points", `${fromPoint.x},${fromPoint.y} ${midPointX},${midPointY} ${toPoint.x},${toPoint.y}`);
+                    path.setAttribute("fill", "none");
+                } else {
+                    path = document.createElementNS("http://www.w3.org/2000/svg", "line");
+                    path.setAttribute("x1", fromPoint.x); path.setAttribute("y1", fromPoint.y);
+                    path.setAttribute("x2", toPoint.x); path.setAttribute("y2", toPoint.y);
+                }
+                 path.setAttribute("stroke", "rgba(34, 197, 94, 0.7)");
+                 path.setAttribute("stroke-width", "6");
+                 path.setAttribute("marker-end", "url(#arrowhead)");
+                 arrowCanvas.append(path);
+            }
+
+            const defs = document.createElementNS("http://www.w3.org/2000/svg", "defs");
+            const marker = document.createElementNS("http://www.w3.org/2000/svg", "marker");
+            marker.setAttribute("id", "arrowhead"); marker.setAttribute("markerWidth", "4"); marker.setAttribute("markerHeight", "4");
+            marker.setAttribute("refX", "2"); marker.setAttribute("refY", "2"); marker.setAttribute("orient", "auto");
+            const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+            circle.setAttribute("cx", "2"); circle.setAttribute("cy", "2"); circle.setAttribute("r", "1.5");
+            circle.setAttribute("fill", "rgba(34, 197, 94, 0.7)");
+            marker.appendChild(circle); defs.appendChild(marker); arrowCanvas.prepend(defs);
+
+            // --- GAME LOGIC ---
+            function onDrop (source, target) {
+                if (!exploreMode) return 'snapback';
+                const move = game.move({ from: source, to: target, promotion: 'q' });
+                if (move === null) return 'snapback';
+                board.position(game.fen());
+                
+                const lastMove = game.history({verbose: true}).slice(-1)[0];
+                const [cat, vari] = currentOpeningKey.split(':');
+                const analysis = openingsData[cat].variations[vari]?.analysis;
+                let moveQuality = 'inaccuracy';
+                if(analysis){
+                    const foundKey = Object.keys(analysis).find(san => lastMove.san.includes(san));
+                    if(foundKey) moveQuality = analysis[foundKey];
+                }
+                showMoveAvatar(target, moveQuality);
+                
+                $('#pgn').text(game.pgn());
+                updateClock();
+            }
+
+            function showMoveAvatar(square, quality) {
+                const qualityData = moveQualityIcons[quality];
+                if (!qualityData) return;
+                const squareEl = $(`#board .square-${square}`);
+                if (!squareEl.length) return;
+                const avatar = $('<div class="move-avatar"></div>').text(qualityData.icon).addClass(qualityData.color).css({ top: squareEl.position().top + squareEl.height() / 2, left: squareEl.position().left + squareEl.width() / 2 });
+                $('#boardWrapper').append(avatar);
+                setTimeout(() => avatar.remove(), 2000);
+            }
+
+            function initBoard() {
+                const config = { position: 'start', draggable: true, onDrop: onDrop, pieceTheme: pieceThemes[pieceStyle] };
+                board = new Chessboard('board', config);
+                applyTheme('wood');
+            }
+
+            function loadOpening(key) {
+                const [category, variation] = key.split(':');
+                currentOpeningKey = key;
+                game.reset();
+                moveHistory = openingsData[category].variations[variation].moves.map(m => {
+                    const move = game.move(m.san);
+                    return { san: m.san, fen: game.fen(), pgn: game.pgn(), text: m.text || '' };
+                });
+                
+                game.reset();
+                currentMoveIndex = -1;
+                exploreMode = false;
+                $('#status').addClass('hidden');
+                updateDisplay();
+                $('.opening-item, .sub-opening-item').removeClass('active');
+                $(`[data-opening-key="${key}"]`).addClass('active');
+            }
+            
+            function updateDisplay() {
+                const isStart = currentMoveIndex === -1;
+                const isEnd = currentMoveIndex === moveHistory.length - 1;
+
+                $('#prevBtn, #resetBtn').prop('disabled', isStart);
+                $('#nextBtn').prop('disabled', isEnd);
+                
+                const [cat, vari] = currentOpeningKey.split(':');
+                $('#openingName').text(openingsData[cat].variations[vari].name);
+
+                if (isStart) {
+                    board.position('start');
+                    game.reset();
+                    $('#pgn').text('');
+                    $('#aiCoachPanel').removeClass('hidden').find('#aiCoachText').text('Select an opening and use the arrows to step through the theory.');
+                } else {
+                    const currentMove = moveHistory[currentMoveIndex];
+                    board.position(currentMove.fen);
+                    game.load(currentMove.fen);
+                    $('#pgn').text(currentMove.pgn);
+                    const targetSquare = currentMove.san.replace(/=./, '').replace(/[+#]/, '').slice(-2);
+                    showMoveAvatar(targetSquare, 'book');
+                    if (currentMove.text) {
+                        $('#aiCoachPanel').removeClass('hidden').find('#aiCoachText').text(currentMove.text);
+                    } else {
+                        $('#aiCoachPanel').addClass('hidden');
+                    }
+                }
+
+                if (isEnd && moveHistory.length > 0) {
+                    exploreMode = true;
+                    $('#status').removeClass('hidden');
+                    startClock();
+                } else {
+                    exploreMode = false;
+                    $('#status').addClass('hidden');
+                    stopClock();
+                }
+            }
+
+            function renderOpeningList() {
+                const list = $('#openingsList');
+                list.empty();
+                const filter = $('#searchOpening').val().toLowerCase();
+                for (const catKey in openingsData) {
+                    const category = openingsData[catKey];
+                    const variations = Object.keys(category.variations).filter(varKey => category.variations[varKey].name.toLowerCase().includes(filter));
+                    if (variations.length > 0) {
+                        const categoryItem = $(`<li class="opening-category text-white p-2 rounded-md font-bold">${category.name} <i class="fas fa-chevron-down float-right"></i></li>`);
+                        list.append(categoryItem);
+                        const subList = $('<ul class="hidden"></ul>');
+                        variations.forEach(varKey => {
+                            subList.append(`<li class="sub-opening-item text-gray-300 p-2 rounded-md" data-opening-key="${catKey}:${varKey}">${category.variations[varKey].name}</li>`);
+                        });
+                        list.append(subList);
+                        categoryItem.on('click', () => subList.slideToggle());
+                    }
+                }
+                 $('.sub-opening-item').on('click', function(e) { e.stopPropagation(); loadOpening($(this).data('opening-key')); });
+            }
+            
+            function applyTheme(theme) {
+                 let light, dark;
+                switch(theme) {
+                    case 'marble': light = '#c9c9c9'; dark = '#6f6f6f'; break;
+                    default: light = '#f0d9b5'; dark = '#b58863';
+                }
+                document.documentElement.style.setProperty('--light-square-bg', light);
+                document.documentElement.style.setProperty('--dark-square-bg', dark);
+                $('.theme-btn').removeClass('active');
+                $(`.theme-btn[data-theme=${theme}]`).addClass('active');
+            }
+
+            function formatTime(seconds) { let min = Math.floor(seconds / 60); let sec = seconds % 60; return `${min}:${sec < 10 ? '0' : ''}${sec}`; }
+            function updateClock() { if (game.turn() === 'w') whiteTime--; else blackTime--; $('#whiteClock').text(formatTime(whiteTime)); $('#blackClock').text(formatTime(blackTime)); }
+            function startClock() { if (!clockInterval) clockInterval = setInterval(updateClock, 1000); }
+            function stopClock() { clearInterval(clockInterval); clockInterval = null; }
+
+            async function getFullAnalysis() { /* ... as before ... */ }
+
+            // --- EVENT LISTENERS ---
+            $('#nextBtn').click(() => { if (currentMoveIndex < moveHistory.length - 1) { currentMoveIndex++; updateDisplay(); } });
+            $('#prevBtn').click(() => { if (currentMoveIndex > -1) { currentMoveIndex--; updateDisplay(); } });
+            $('#resetBtn').click(() => { loadOpening(currentOpeningKey); whiteTime=300; blackTime=300; $('#whiteClock, #blackClock').text('5:00'); });
+            $('#searchOpening').on('input', renderOpeningList);
+            $('#clearArrowsBtn').click(() => { arrowCanvas.empty().prepend(defs); });
+            $('.theme-btn').click(function() { applyTheme($(this).data('theme')); });
+            $('.piece-btn').click(function() { pieceStyle = $(this).data('style'); board.destroy(); initBoard(); loadOpening(currentOpeningKey); $('.piece-btn').removeClass('active'); $(this).addClass('active'); });
+            $('#analysisBtn').on('click', getFullAnalysis);
+
+            // --- INITIALIZATION ---
+            initBoard();
+            renderOpeningList();
+            loadOpening('e4:ruy-lopez');
+        });
+    </script>
+</body>
+</html>

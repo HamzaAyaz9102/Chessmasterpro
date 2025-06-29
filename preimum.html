@@ -1,0 +1,302 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium Membership - ChessMaster Pro</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Custom Styles -->
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #1a1a1a;
+            color: #f0f0f0;
+        }
+        .pricing-card {
+            background: #2a2a2a;
+            border: 1px solid #4a4a4a;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+        .pricing-card:hover {
+            transform: scale(1.02);
+            border-color: #ffd700;
+        }
+        .btn-premium {
+            background: linear-gradient(90deg, #ffd700, #ffb700);
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.4);
+            transition: all 0.3s ease;
+        }
+        .btn-premium:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.6);
+        }
+        .faq-item {
+            border-bottom: 1px solid #3a3a3a;
+        }
+        .faq-item summary {
+            cursor: pointer;
+            outline: none;
+        }
+        .faq-item[open] summary {
+            color: #ffd700;
+        }
+        .faq-item .faq-answer {
+             padding: 1rem;
+             background-color: #2a2a2a;
+             border-radius: 0 0 0.5rem 0.5rem;
+        }
+        /* Basic spinner for loading state */
+        .spinner {
+            border: 2px solid rgba(255,255,255,0.3);
+            border-top: 2px solid #fff;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .leaderboard-item:hover {
+            background-color: #3a3a3a;
+        }
+        .dimmed-feature {
+            color: #6b7280; /* text-gray-500 */
+        }
+        .dimmed-feature .fa-check-circle {
+            color: #4b5563; /* text-gray-600 */
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- =========== Header =========== -->
+    <header class="bg-gray-900/50 backdrop-blur-sm sticky top-0 z-50 border-b border-gray-700/50">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="index.html" class="text-2xl font-bold text-white flex items-center">
+                <i class="fas fa-chess-knight text-yellow-400 mr-2"></i> ChessMaster Pro
+            </a>
+            <div class="hidden md:flex items-center space-x-8">
+                <a href="puzzles.html" class="text-gray-300 hover:text-yellow-400 transition duration-300 font-medium">Puzzles</a>
+                <a href="openings.html" class="text-gray-300 hover:text-yellow-400 transition duration-300 font-medium">Openings</a>
+                <a href="premium.html" class="text-yellow-400 border-b-2 border-yellow-400 transition duration-300 font-bold">Premium</a>
+                <a href="#" class="text-gray-300 hover:text-white transition duration-300">Login</a>
+                <a href="#" class="bg-gray-700 text-white px-5 py-2 rounded-md hover:bg-gray-600 transition duration-300 font-semibold">Sign Up</a>
+            </div>
+            <button class="md:hidden text-white"><i class="fas fa-bars text-2xl"></i></button>
+        </nav>
+    </header>
+
+    <!-- =========== Main Content =========== -->
+    <main>
+        <!-- =========== Hero Section =========== -->
+        <section class="py-20 text-center bg-gray-900">
+            <div class="container mx-auto px-6">
+                <h1 class="text-4xl md:text-5xl font-extrabold text-white">Unlock Your Chess Superpowers</h1>
+                <p class="text-lg text-gray-300 max-w-3xl mx-auto mt-4">Go beyond basic training. Get elite analysis, personalized coaching, and master-level insights with a Premium Membership.</p>
+            </div>
+        </section>
+
+        <!-- =========== Pricing Section =========== -->
+        <section class="py-20">
+            <div class="container mx-auto px-6">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                    <!-- Free Plan -->
+                    <div class="pricing-card rounded-xl p-8">
+                        <h3 class="text-2xl font-bold text-white">Free</h3>
+                        <p class="text-gray-400 mt-1">The essentials to get started.</p>
+                        <p class="text-5xl font-bold text-white my-6">$0<span class="text-lg text-gray-400">/forever</span></p>
+                        <ul class="space-y-4 text-gray-300 mb-8">
+                            <li class="flex items-center"><i class="fas fa-check-circle text-yellow-400 mr-3"></i> Basic Game Review</li>
+                            <li class="flex items-center"><i class="fas fa-check-circle text-yellow-400 mr-3"></i> 10 Puzzles per Day</li>
+                            <li class="flex items-center"><i class="fas fa-check-circle text-yellow-400 mr-3"></i> Limited Openings Explorer</li>
+                            <li class="flex items-center"><i class="fas fa-check-circle text-yellow-400 mr-3"></i> Full Leaderboard Access</li>
+                        </ul>
+                         <button class="mt-auto w-full bg-gray-700 text-white font-bold py-3 rounded-lg hover:bg-gray-600 transition-colors duration-300">Sign Up For Free</button>
+                    </div>
+
+                    <!-- Monthly Plan -->
+                    <div class="pricing-card rounded-xl p-8">
+                        <h3 class="text-2xl font-bold text-white">Monthly</h3>
+                        <p class="text-gray-400 mt-1">Perfect for a test drive.</p>
+                        <p class="text-5xl font-bold text-white my-6">$14<span class="text-lg text-gray-400">/month</span></p>
+                        <ul class="space-y-4 text-gray-300 mb-8">
+                            <li class="flex items-center"><i class="fas fa-check-circle text-yellow-400 mr-3"></i> Unlimited Puzzles & Ratings</li>
+                            <li class="flex items-center"><i class="fas fa-check-circle text-yellow-400 mr-3"></i> Unlimited In-Depth Game Reviews</li>
+                            <li class="flex items-center"><i class="fas fa-check-circle text-yellow-400 mr-3"></i> Full Lesson & Video Library</li>
+                            <li class="flex items-center"><i class="fas fa-check-circle text-yellow-400 mr-3"></i> Advanced Player Insights</li>
+                            <li class="flex items-center"><i class="fas fa-check-circle text-yellow-400 mr-3"></i> Deep Cloud Analysis w/ Stockfish 16</li>
+                            <li class="flex items-center"><i class="fas fa-check-circle text-yellow-400 mr-3"></i> Ad-Free Experience</li>
+                        </ul>
+                        <button class="mt-auto w-full bg-gray-600 text-white font-bold py-3 rounded-lg hover:bg-gray-500 transition-colors duration-300">Choose Monthly</button>
+                    </div>
+
+                    <!-- Yearly Plan -->
+                    <div class="pricing-card rounded-xl p-8 relative border-2 border-yellow-400">
+                        <span class="absolute top-0 -translate-y-1/2 bg-yellow-400 text-gray-900 text-sm font-bold px-3 py-1 rounded-full">BEST VALUE</span>
+                        <h3 class="text-2xl font-bold text-white">Yearly</h3>
+                        <p class="text-gray-400 mt-1">Commit to mastery and save 40%.</p>
+                        <p class="text-5xl font-bold text-white my-6">$99<span class="text-lg text-gray-400">/year</span></p>
+                         <ul class="space-y-4 text-gray-300 mb-8">
+                            <li class="flex items-center"><i class="fas fa-check-circle text-yellow-400 mr-3"></i> Unlimited Puzzles & Ratings</li>
+                            <li class="flex items-center"><i class="fas fa-check-circle text-yellow-400 mr-3"></i> Unlimited In-Depth Game Reviews</li>
+                            <li class="flex items-center"><i class="fas fa-check-circle text-yellow-400 mr-3"></i> Full Lesson & Video Library</li>
+                            <li class="flex items-center"><i class="fas fa-check-circle text-yellow-400 mr-3"></i> Advanced Player Insights</li>
+                            <li class="flex items-center"><i class="fas fa-check-circle text-yellow-400 mr-3"></i> Deep Cloud Analysis w/ Stockfish 16</li>
+                            <li class="flex items-center"><i class="fas fa-check-circle text-yellow-400 mr-3"></i> Ad-Free Experience</li>
+                        </ul>
+                        <button class="btn-premium mt-auto w-full text-gray-900 font-bold py-3 rounded-lg">Choose Yearly</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- =========== Free Game Review =========== -->
+        <section class="py-20 bg-gray-900">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold text-white">Get a Free Game Review</h2>
+                    <p class="text-gray-400 mt-2">All members get free basic analysis. Paste your game PGN to see key moments and get a quick report.</p>
+                </div>
+                <div class="max-w-3xl mx-auto bg-black p-8 rounded-xl border border-gray-700">
+                    <label for="pgnInput" class="block text-sm font-medium text-gray-300 mb-2">Paste your game PGN:</label>
+                    <textarea id="pgnInput" rows="4" class="w-full bg-gray-800 text-gray-200 p-3 rounded-md border border-gray-600 focus:ring-2 focus:ring-yellow-400 focus:outline-none" placeholder="1. e4 e5 2. Nf3 Nc6 3. Bb5 a6..."></textarea>
+                    <button id="analyzeBtn" class="mt-4 w-full bg-indigo-600 text-white font-bold py-3 rounded-lg hover:bg-indigo-500 transition-colors duration-300 flex items-center justify-center">
+                        <i class="fas fa-magic-sparkles mr-2"></i> Analyze Your Game
+                    </button>
+                    <div id="analysisResult" class="mt-6 hidden">
+                        <h4 class="text-xl font-bold text-white mb-3">Quick Report:</h4>
+                        <div id="analysisText" class="p-4 bg-indigo-900/50 rounded-lg border border-indigo-700 text-indigo-200 whitespace-pre-wrap"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- =========== Leaderboard Preview Section =========== -->
+        <section id="leaderboard" class="py-20">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold text-white">Top Players Leaderboard</h2>
+                    <p class="text-gray-400 mt-2">See how you stack up against the best in our community.</p>
+                </div>
+                <div class="max-w-2xl mx-auto bg-gray-800 rounded-xl p-6 border border-gray-700">
+                    <ul class="space-y-2">
+                        <!-- Rank 1 -->
+                        <li class="leaderboard-item flex items-center justify-between p-3 bg-gray-900/80 rounded-lg transition-colors duration-300">
+                            <div class="flex items-center">
+                                <span class="text-lg font-bold text-yellow-400 w-8">1.</span>
+                                <img src="https://placehold.co/40x40/ffd700/1a1a1a?text=V" class="w-10 h-10 rounded-full mx-4 border-2 border-yellow-400" alt="Player">
+                                <span class="font-semibold text-white">VeraPawlov</span>
+                            </div>
+                            <span class="font-bold text-xl text-yellow-300">2458</span>
+                        </li>
+                        <!-- Rank 2 -->
+                        <li class="leaderboard-item flex items-center justify-between p-3 rounded-lg transition-colors duration-300">
+                            <div class="flex items-center">
+                                <span class="text-lg font-bold text-gray-300 w-8">2.</span>
+                                <img src="https://placehold.co/40x40/c0c0c0/1a1a1a?text=A" class="w-10 h-10 rounded-full mx-4 border-2 border-gray-400" alt="Player">
+                                <span class="font-semibold text-white">AlphaTactic</span>
+                            </div>
+                            <span class="font-bold text-xl text-gray-200">2391</span>
+                        </li>
+                        <!-- Rank 3 -->
+                        <li class="leaderboard-item flex items-center justify-between p-3 rounded-lg transition-colors duration-300">
+                            <div class="flex items-center">
+                                <span class="text-lg font-bold text-orange-400 w-8">3.</span>
+                                <img src="https://placehold.co/40x40/cd7f32/1a1a1a?text=Q" class="w-10 h-10 rounded-full mx-4 border-2 border-orange-400" alt="Player">
+                                <span class="font-semibold text-white">QueenBee</span>
+                            </div>
+                            <span class="font-bold text-xl text-gray-300">2350</span>
+                        </li>
+                    </ul>
+                     <p class="text-center text-gray-400 mt-6">... and thousands more. Full leaderboards available to all members.</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- =========== Footer =========== -->
+    <footer class="bg-black py-12">
+        <div class="container mx-auto px-6 text-center text-gray-400">
+            <div class="mb-6">
+                 <a href="index.html" class="text-xl font-bold text-white flex items-center justify-center">
+                    <i class="fas fa-chess-knight text-yellow-400 mr-2"></i> ChessMaster Pro
+                </a>
+            </div>
+            <p>&copy; 2025 ChessMaster Pro. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        const analyzeBtn = document.getElementById('analyzeBtn');
+        const pgnInput = document.getElementById('pgnInput');
+        const analysisResult = document.getElementById('analysisResult');
+        const analysisText = document.getElementById('analysisText');
+
+        analyzeBtn.addEventListener('click', async () => {
+            const pgn = pgnInput.value.trim();
+            if (!pgn) {
+                alert("Please paste a PGN to analyze.");
+                return;
+            }
+
+            // --- Show Loading State ---
+            analyzeBtn.disabled = true;
+            analyzeBtn.innerHTML = '<div class="spinner"></div><span class="ml-2">Analyzing...</span>';
+
+            // --- Construct Prompt for Gemini API ---
+            const prompt = `You are a chess analysis tool. A user has provided the following PGN for a game they played: \n\n${pgn}\n\nProvide a very brief, high-level review (2-3 sentences).
+            1. Identify the name of the opening played.
+            2. Point out the single biggest mistake (a 'blunder') if one exists.
+            3. Briefly classify the game result (e.g., "A sharp tactical battle," "A quiet positional game").
+            This is a free analysis, so keep it concise.`;
+
+            try {
+                // --- Call Gemini API ---
+                const payload = { contents: [{ role: "user", parts: [{ text: prompt }] }] };
+                const apiKey = ""; // Provided by environment
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+                
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) throw new Error(`API error: ${response.status}`);
+                
+                const result = await response.json();
+                const text = result.candidates[0].content.parts[0].text;
+
+                // --- Display Result ---
+                analysisText.textContent = text;
+                analysisResult.classList.remove('hidden');
+
+            } catch (error) {
+                console.error("Error fetching analysis:", error);
+                analysisText.textContent = "Sorry, the AI coach is unavailable right now. Please try again later.";
+                analysisResult.classList.remove('hidden');
+            } finally {
+                // --- Restore Button State ---
+                analyzeBtn.disabled = false;
+                analyzeBtn.innerHTML = '<i class="fas fa-magic-sparkles mr-2"></i> Analyze Your Game';
+            }
+        });
+    </script>
+</body>
+</html>
