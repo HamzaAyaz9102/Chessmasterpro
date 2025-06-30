@@ -196,7 +196,48 @@
             // --- UI & DOM REFERENCES ---
             const arrowCanvas = $('#arrowCanvas');
             const boardElement = $('#board');
-
+'c4': {
+    name: "English Opening (1. c4)",
+    variations: {
+        'english-mainline': {
+            name: "English Main Line",
+            moves: [
+                { san: 'c4' },
+                { san: 'e5' },
+                { san: 'Nc3' },
+                { san: 'Nc6' },
+                // ...more moves up to 15...
+            ],
+            analysis: { 'e5': 'best', 'Nc3': 'great' }
+        }
+    }
+},
+            'e4': {
+    name: "King's Pawn (1. e4)",
+    variations: {
+        'ruy-lopez': { /* ... */ },
+        'scotch-game': {
+            name: 'Scotch Game',
+            moves: [
+                { san: 'e4' }, { san: 'e5' }, { san: 'Nf3' }, { san: 'Nc6' },
+                { san: 'd4' }, { san: 'exd4' }, { san: 'Nxd4' }, { san: 'Bc5' },
+                // ...keep going (add up to 15 moves)...
+            ],
+            analysis: { 'd4': 'best', 'Bc5': 'great' }
+        },
+        // ...add more...
+    }
+}'sicilian-dragon': {
+    name: 'Sicilian Dragon',
+    moves: [
+        { san: 'e4' }, { san: 'c5' }, { san: 'Nf3' }, { san: 'd6' },
+        { san: 'd4' }, { san: 'cxd4' }, { san: 'Nxd4' }, { san: 'Nf6' },
+        { san: 'Nc3' }, { san: 'g6' }, { san: 'Be3' }, { san: 'Bg7' },
+        { san: 'f3' }, { san: 'O-O' }, { san: 'Qd2' }, { san: 'Nc6' },
+        { san: 'O-O-O' }, { san: 'Bd7' }, { san: 'h4' }, { san: 'h5' }
+    ],
+    analysis: { 'g6': 'best', 'O-O': 'great', 'O-O-O': 'book' }
+}
             // --- DRAWING LOGIC ---
             function getSquareFromCoordinates(x, y) {
                 const boardRect = boardElement.get(0).getBoundingClientRect();
