@@ -1,0 +1,216 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700;400&display=swap');
+
+:root {
+  --main-bg: #202530;
+  --card-bg: #292f3b;
+  --accent: #e5c07b;
+  --text: #f6f6f6;
+  --muted: #b0b0b0;
+  --hover: #ffe082;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--main-bg);
+  color: var(--text);
+  font-family: 'Montserrat', Arial, sans-serif;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #171a23;
+  padding: 1.2rem 0 0.6rem 0;
+  box-shadow: 0 2px 8px #0002;
+}
+
+.logo-anim {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--accent);
+  user-select: none;
+  margin-bottom: 0.5rem;
+}
+
+#chess-piece {
+  filter: drop-shadow(0 2px 4px #0008);
+  animation: bounce 1.8s infinite cubic-bezier(.71,-0.24,.4,1.61);
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-7px);}
+}
+
+.site-title {
+  letter-spacing: 1px;
+}
+
+nav {
+  display: flex;
+  gap: 2rem;
+  margin: 0.5rem 0 0 0;
+}
+
+nav a {
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1.1rem;
+  transition: color 0.2s;
+  position: relative;
+}
+
+nav a::after {
+  content: "";
+  display: block;
+  height: 2px;
+  width: 0;
+  background: var(--hover);
+  transition: 0.3s;
+  margin: 0 auto;
+}
+
+nav a:hover {
+  color: var(--hover);
+}
+
+nav a:hover::after {
+  width: 100%;
+}
+
+main {
+  flex: 1;
+  width: 100%;
+}
+
+.intro {
+  text-align: center;
+  padding: 2.5rem 1rem 1.2rem 1rem;
+}
+
+.intro h1 {
+  font-size: 2.4rem;
+  margin-bottom: 0.7rem;
+  color: var(--accent);
+}
+
+.intro p {
+  color: var(--muted);
+  font-size: 1.15rem;
+  margin-bottom: 2rem;
+}
+
+.cta-btn {
+  display: inline-block;
+  background: var(--accent);
+  color: #212121;
+  border: none;
+  padding: 0.9rem 2.2rem;
+  font-size: 1.15rem;
+  font-weight: 700;
+  border-radius: 100px;
+  box-shadow: 0 2px 10px #0001;
+  text-decoration: none;
+  transition: background .18s, transform .18s;
+  letter-spacing: 1px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.cta-btn:hover {
+  background: var(--hover);
+  transform: translateY(-2px) scale(1.035);
+}
+
+.cards {
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+  padding: 1.5rem 2% 3.5rem 2%;
+  flex-wrap: wrap;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.card {
+  background: var(--card-bg);
+  border-radius: 18px;
+  padding: 2rem 1.5rem 1.2rem 1.5rem;
+  box-shadow: 0 2px 20px #0002;
+  flex: 1 1 270px;
+  min-width: 260px;
+  max-width: 350px;
+  margin-bottom: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  opacity: 0;
+  transform: translateY(30px);
+  animation: fadeinUp 0.8s forwards;
+}
+
+.card h2 {
+  color: var(--hover);
+  margin-top: 0;
+}
+
+.card p {
+  color: var(--muted);
+  margin-bottom: 1.3rem;
+}
+
+.card-link {
+  margin-top: auto;
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 1.05rem;
+  transition: color .2s;
+}
+
+.card-link:hover {
+  color: var(--hover);
+  text-decoration: underline;
+}
+
+footer {
+  text-align: center;
+  padding: 1.5rem 0 .6rem 0;
+  color: #888;
+  background: #171a23;
+  font-size: 1rem;
+  margin-top: auto;
+}
+
+@media (max-width: 900px) {
+  .cards { flex-direction: column; align-items: center; gap: 0; }
+  .card { width: 95%; max-width: 98vw; }
+}
+
+@keyframes fadeinUp {
+  from { opacity: 0; transform: translateY(30px);}
+  to { opacity: 1; transform: translateY(0);}
+}
+
+.fadein {
+  opacity: 0;
+  animation: fadeinUp 0.8s forwards;
+}
+
+.fadein:nth-child(1) { animation-delay: 0s; }
+.fadein:nth-child(2) { animation-delay: 0.2s; }
+.fadein:nth-child(3) { animation-delay: 0.4s; }
+.fadein:nth-child(4) { animation-delay: 0.6s; }
