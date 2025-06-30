@@ -1,14 +1,70 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>My Chess Website</title>
+  <meta charset="UTF-8">
+  <title>Chessmaster Pro - Home</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>Welcome to My Chess Website!</h1>
-  <ul>
-    <li><a href="opening.html">Openings</a></li>
-    <li><a href="preimum.html">Premium</a></li>
-    <li><a href="puzzles.html">Puzzles</a></li>
-  </ul>
+  <header>
+    <div class="logo-anim">
+      <!-- Animated chess piece SVG -->
+      <svg id="chess-piece" viewBox="0 0 64 64" width="48" height="48">
+        <g>
+          <ellipse cx="32" cy="56" rx="18" ry="6" fill="#444"/>
+          <rect x="26" y="16" width="12" height="30" rx="6" fill="#e5c07b"/>
+          <ellipse id="crown" cx="32" cy="16" rx="8" ry="6" fill="#e5c07b"/>
+          <circle cx="32" cy="11" r="4" fill="#e5c07b"/>
+        </g>
+      </svg>
+      <span class="site-title">Chessmaster Pro</span>
+    </div>
+    <nav>
+      <a href="openings.html">Openings</a>
+      <a href="premium.html">Premium</a>
+      <a href="puzzles.html">Puzzles</a>
+    </nav>
+  </header>
+  <main>
+    <section class="intro fadein">
+      <h1>Welcome to Chessmaster Pro!</h1>
+      <p>Sharpen your chess skills with interactive tactics, deep-opening theory, and exclusive premium content. Ready to level up your game?</p>
+      <a href="premium.html" class="cta-btn">Go Premium</a>
+    </section>
+    <section class="cards">
+      <div class="card fadein" style="animation-delay: .2s">
+        <h2>Openings</h2>
+        <p>Master iconic chess openings with guides, move-by-move breakdowns, and practical examples.</p>
+        <a class="card-link" href="openings.html">Explore Openings &rarr;</a>
+      </div>
+      <div class="card fadein" style="animation-delay: .4s">
+        <h2>Premium</h2>
+        <p>Unlock advanced lessons, ad-free access, and member-only tournaments. Become a chess pro!</p>
+        <a class="card-link" href="premium.html">See Premium &rarr;</a>
+      </div>
+      <div class="card fadein" style="animation-delay: .6s">
+        <h2>Puzzles</h2>
+        <p>Test your tactics daily with fresh chess puzzles and challenges for all skill levels.</p>
+        <a class="card-link" href="puzzles.html">Solve Puzzles &rarr;</a>
+      </div>
+    </section>
+  </main>
+  <footer>
+    &copy; 2025 Hamza Ayaz &mdash; Built with ❤️ for chess lovers.
+  </footer>
+
+  <script>
+    // Animate the chess piece crown with a gentle up/down motion
+    const crown = document.getElementById('crown');
+    let t = 0;
+    function animateCrown() {
+      t += 0.03;
+      const y = 16 + Math.sin(t) * 2;
+      crown.setAttribute('cy', y);
+      requestAnimationFrame(animateCrown);
+    }
+    animateCrown();
+  </script>
 </body>
 </html>
