@@ -1,70 +1,324 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Chessmaster Pro - Home</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Chessmaster Pro - The Ultimate Chess Trainer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      background: radial-gradient(ellipse at 60% 0%, #222 60%, #181a22 100%);
+      color: #fff;
+      min-height: 100vh;
+    }
+    header.hero {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 2.5rem;
+      padding: 4rem 2rem 2rem 2rem;
+    }
+    .hero-svg {
+      filter: drop-shadow(0 6px 36px #e5c07b66);
+      flex-shrink: 0;
+    }
+    .hero-text {
+      max-width: 520px;
+      text-align: left;
+    }
+    .hero-text h1 {
+      font-size: 3rem;
+      color: #ffd700;
+      margin-bottom: 0.3em;
+      letter-spacing: -1px;
+      font-weight: 800;
+    }
+    .hero-text h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 0.5em;
+      letter-spacing: 0.5px;
+    }
+    .highlight {
+      color: #ffe49c;
+      background: linear-gradient(90deg, #ffe49c 60%, #e5c07b 100%);
+      padding: 0.1em 0.4em;
+      border-radius: 0.3em;
+      box-shadow: 0 2px 12px #ffd70033;
+      display: inline-block;
+    }
+    .typing {
+      border-right: .13em solid #ffd700;
+      white-space: nowrap;
+      overflow: hidden;
+      animation: typing 2s steps(20, end), blink-caret 0.75s step-end infinite;
+      display: inline-block;
+      min-width: 20ch;
+    }
+    @keyframes typing {
+      0% { width: 0 }
+      100% { width: 20ch }
+    }
+    @keyframes blink-caret {
+      0%, 100% { border-color: transparent }
+      50% { border-color: #ffd700 }
+    }
+    .fadein { opacity: 0; animation: fadein 1.6s 0.8s forwards; display: inline-block;}
+    @keyframes fadein { to { opacity: 1; } }
+    .hero-actions {
+      margin-top: 2em;
+      display: flex;
+      gap: 1em;
+      flex-wrap: wrap;
+    }
+    .hero-btn {
+      background: linear-gradient(90deg, #ffd700, #e5c07b 80%);
+      color: #222;
+      padding: 0.85em 1.8em;
+      font-weight: 800;
+      border-radius: 2em;
+      font-size: 1.1em;
+      text-decoration: none;
+      box-shadow: 0 2px 12px #ffd70044;
+      border: none;
+      transition: transform 0.17s, box-shadow 0.17s;
+      display: inline-block;
+    }
+    .hero-btn.secondary {
+      background: #312e81;
+      color: #fafafa;
+      box-shadow: 0 2px 12px #312e8133;
+    }
+    .hero-btn.premium {
+      background: linear-gradient(90deg, #eab308, #f59e42 80%);
+      color: #fff;
+      box-shadow: 0 2px 18px #f59e4266;
+    }
+    .hero-btn:hover {
+      transform: translateY(-2px) scale(1.04);
+      box-shadow: 0 8px 28px #ffd70066;
+    }
+    .features {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.7rem;
+      justify-content: center;
+      margin: 3rem 2vw 2rem 2vw;
+    }
+    .feature-card {
+      background: #232323;
+      border-radius: 14px;
+      box-shadow: 0 2px 10px #0002;
+      width: 260px;
+      padding: 1.3rem 1.2rem 1.1rem 1.2rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      min-height: 140px;
+      transition: box-shadow 0.18s, transform 0.18s;
+    }
+    .feature-card:hover {
+      box-shadow: 0 8px 24px #0004;
+      transform: translateY(-4px) scale(1.035);
+    }
+    .feature-icon {
+      font-size: 2.5rem;
+      color: #ffd700;
+      margin-right: 0.6em;
+      flex-shrink: 0;
+    }
+    .feature-card h3 {
+      color: #ffe49c;
+      font-size: 1.18rem;
+      margin: 0 0 0.3em 0;
+      font-weight: 700;
+    }
+    .feature-card p {
+      color: #bdbdbd;
+      font-size: 1rem;
+      margin: 0;
+    }
+    .gallery-section {
+      margin: 3.5rem auto 2rem auto;
+      max-width: 1200px;
+      padding: 0 2vw;
+    }
+    .gallery-section h2 {
+      font-size: 1.6rem;
+      text-align: center;
+      color: #ffd700;
+      margin-bottom: 1.3rem;
+      font-weight: 700;
+    }
+    .gallery {
+      display: flex;
+      gap: 1.5rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .gallery-img {
+      width: 220px;
+      height: 140px;
+      border-radius: 16px;
+      background-size: cover;
+      background-position: center;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 2px 20px #0003;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .gallery-img span {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      padding: 0.7em 0;
+      background: linear-gradient(0deg, #181a22cc 90%, #2220 100%);
+      color: #ffd700;
+      font-weight: 700;
+      font-size: 1.1rem;
+      letter-spacing: 1px;
+      text-align: center;
+      border-bottom-left-radius: 16px;
+      border-bottom-right-radius: 16px;
+      pointer-events: none;
+    }
+    .gallery-img.ruylopez {
+      background-image: url('https://images.chesscomfiles.com/uploads/v1/images_users/tiny_mce/PNektar/phptn8yFz.png');
+    }
+    .gallery-img.sicilian {
+      background-image: url('https://images.chesscomfiles.com/uploads/v1/images_users/tiny_mce/PNektar/php3aOzwa.png');
+    }
+    .gallery-img.qg {
+      background-image: url('https://images.chesscomfiles.com/uploads/v1/images_users/tiny_mce/PNektar/php3G8rCy.png');
+    }
+    .gallery-img.french {
+      background-image: url('https://images.chesscomfiles.com/uploads/v1/images_users/tiny_mce/PNektar/php3A5sLb.png');
+    }
+    .gallery-img:hover {
+      transform: scale(1.08) rotate(-2deg);
+      box-shadow: 0 12px 42px #ffd70033;
+      z-index: 2;
+    }
+    footer {
+      text-align: center;
+      color: #ffd700;
+      font-size: 1rem;
+      padding: 1.3rem 0 1.2rem 0;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+    @media (max-width: 900px) {
+      .hero { flex-direction: column; gap: 1.5rem;}
+      .gallery { gap: 1rem; }
+      .gallery-img { width: 160px; height: 110px;}
+      .features { gap: 1.1rem;}
+      .feature-card { width: 98vw; max-width: 360px;}
+    }
+    @media (max-width: 600px) {
+      .hero { padding: 2.2rem 1rem 1.2rem 1rem;}
+      .hero-text h1 { font-size: 2.1rem;}
+      .feature-card { padding: 1rem 0.8rem;}
+      .gallery-img { width: 98vw; min-width: 98vw; max-width: 98vw; height: 90px;}
+    }
+  </style>
 </head>
 <body>
-  <header>
-    <div class="logo-anim">
-      <!-- Animated chess piece SVG -->
-      <svg id="chess-piece" viewBox="0 0 64 64" width="48" height="48">
-        <g>
-          <ellipse cx="32" cy="56" rx="18" ry="6" fill="#444"/>
-          <rect x="26" y="16" width="12" height="30" rx="6" fill="#e5c07b"/>
-          <ellipse id="crown" cx="32" cy="16" rx="8" ry="6" fill="#e5c07b"/>
-          <circle cx="32" cy="11" r="4" fill="#e5c07b"/>
-        </g>
-      </svg>
-      <span class="site-title">Chessmaster Pro</span>
+  <header class="hero">
+    <svg width="120" height="120" viewBox="0 0 120 120" class="hero-svg" id="heroChessSvg">
+      <ellipse cx="60" cy="100" rx="38" ry="14" fill="#444" />
+      <rect x="48" y="38" width="24" height="50" rx="11" fill="#e5c07b" id="chesspiece" />
+      <ellipse cx="60" cy="38" rx="16" ry="11" fill="#e5c07b" />
+      <circle cx="60" cy="28" r="7" fill="#e5c07b" />
+      <g>
+        <polygon points="60,22 63,18 65,22 67,18 69,22 72,18 74,22" fill="#ffd700" opacity="0.84">
+          <animateTransform attributeName="transform" type="rotate" from="0 60 18" to="360 60 18" dur="2s" repeatCount="indefinite" />
+        </polygon>
+      </g>
+    </svg>
+    <div class="hero-text">
+      <h1>
+        <span class="highlight">Chessmaster Pro</span>
+      </h1>
+      <h2>
+        <span class="typing">The Ultimate Chess Trainer</span>
+      </h2>
+      <p>
+        <span class="fadein">
+          Level up your chess game with interactive openings, puzzles, animated boards, and real progress tracking.
+        </span>
+      </p>
+      <div class="hero-actions">
+        <a href="openings.html" class="hero-btn">Openings Trainer</a>
+        <a href="puzzles.html" class="hero-btn secondary">Solve Puzzles</a>
+        <a href="premium.html" class="hero-btn premium">Go Premium</a>
+      </div>
     </div>
-    <nav>
-      <a href="openings.html">Openings</a>
-      <a href="premium.html">Premium</a>
-      <a href="puzzles.html">Puzzles</a>
-    </nav>
   </header>
-  <main>
-    <section class="intro fadein">
-      <h1>Welcome to Chessmaster Pro!</h1>
-      <p>Sharpen your chess skills with interactive tactics, deep-opening theory, and exclusive premium content. Ready to level up your game?</p>
-      <a href="premium.html" class="cta-btn">Go Premium</a>
-    </section>
-    <section class="cards">
-      <div class="card fadein" style="animation-delay: .2s">
-        <h2>Openings</h2>
-        <p>Master iconic chess openings with guides, move-by-move breakdowns, and practical examples.</p>
-        <a class="card-link" href="openings.html">Explore Openings &rarr;</a>
+
+  <section class="features">
+    <div class="feature-card">
+      <span class="feature-icon">♟️</span>
+      <div>
+        <h3>Animated Chessboard</h3>
+        <p>Watch openings come alive with smooth move-by-move animation and drag-and-drop play.</p>
       </div>
-      <div class="card fadein" style="animation-delay: .4s">
-        <h2>Premium</h2>
-        <p>Unlock advanced lessons, ad-free access, and member-only tournaments. Become a chess pro!</p>
-        <a class="card-link" href="premium.html">See Premium &rarr;</a>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">🧠</span>
+      <div>
+        <h3>AI-Powered Coach</h3>
+        <p>Get instant feedback, learn theory, and explore lines with our built-in Gemini AI.</p>
       </div>
-      <div class="card fadein" style="animation-delay: .6s">
-        <h2>Puzzles</h2>
-        <p>Test your tactics daily with fresh chess puzzles and challenges for all skill levels.</p>
-        <a class="card-link" href="puzzles.html">Solve Puzzles &rarr;</a>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">🏆</span>
+      <div>
+        <h3>Track Your Progress</h3>
+        <p>Visualize your improvement. See stats, streaks, and your opening win rates.</p>
       </div>
-    </section>
-  </main>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">✨</span>
+      <div>
+        <h3>Modern & Mobile Ready</h3>
+        <p>Sleek design, smooth transitions, and responsive layouts—looks great everywhere!</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="gallery-section">
+    <h2>Featured Openings</h2>
+    <div class="gallery">
+      <div class="gallery-img ruylopez"><span>Ruy Lopez</span></div>
+      <div class="gallery-img sicilian"><span>Sicilian Defense</span></div>
+      <div class="gallery-img qg"><span>Queen's Gambit</span></div>
+      <div class="gallery-img french"><span>French Defense</span></div>
+    </div>
+  </section>
+
   <footer>
-    &copy; 2025 Hamza Ayaz &mdash; Built with ❤️ for chess lovers.
+    &copy; 2025 Hamza Ayaz &mdash; Chessmaster Pro
   </footer>
 
   <script>
-    // Animate the chess piece crown with a gentle up/down motion
-    const crown = document.getElementById('crown');
-    let t = 0;
-    function animateCrown() {
-      t += 0.03;
-      const y = 16 + Math.sin(t) * 2;
-      crown.setAttribute('cy', y);
-      requestAnimationFrame(animateCrown);
-    }
-    animateCrown();
+    // Animate the chess piece up and down
+    window.addEventListener("DOMContentLoaded", () => {
+      const piece = document.getElementById("chesspiece");
+      let t = 0;
+      function animate() {
+        t += 0.04;
+        if(piece) piece.setAttribute("y", 38 + Math.sin(t) * 5);
+        requestAnimationFrame(animate);
+      }
+      animate();
+    });
   </script>
 </body>
 </html>
