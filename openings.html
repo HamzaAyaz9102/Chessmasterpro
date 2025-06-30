@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -278,10 +278,19 @@
                 setTimeout(() => avatar.remove(), 2000);
             }
 
-            function initBoard() {
-                const config = { position: 'start', draggable: true, onDrop: onDrop, pieceTheme: pieceThemes[pieceStyle] };
+            function initBoard(draggable = false, fen = 'start') {
+                if (board) board.destroy();
+                const config = { position: fen, draggable: draggable, onDrop: onDrop, pieceTheme: pieceThemes[pieceStyle] };
                 board = new Chessboard('board', config);
                 applyTheme('wood');
+            }
+
+            function enableExploreMode() {
+                exploreMode = true;
+                $('#status').removeClass('hidden');
+                startClock();
+                // Reinitialize board in current position and make it draggable
+                initBoard(true, game.fen());
             }
 
             function loadOpening(key) {
@@ -292,11 +301,12 @@
                     const move = game.move(m.san);
                     return { san: m.san, fen: game.fen(), pgn: game.pgn(), text: m.text || '' };
                 });
-                
                 game.reset();
                 currentMoveIndex = -1;
                 exploreMode = false;
                 $('#status').addClass('hidden');
+                // Always reset the board to non-draggable at start
+                initBoard(false, 'start');
                 updateDisplay();
                 $('.opening-item, .sub-opening-item').removeClass('active');
                 $(`[data-opening-key="${key}"]`).addClass('active');
@@ -332,13 +342,15 @@
                 }
 
                 if (isEnd && moveHistory.length > 0) {
-                    exploreMode = true;
-                    $('#status').removeClass('hidden');
-                    startClock();
+                    enableExploreMode();
                 } else {
                     exploreMode = false;
                     $('#status').addClass('hidden');
                     stopClock();
+                    // Make sure board is not draggable when not in explore mode
+                    if (!isStart) {
+                        initBoard(false, game.fen());
+                    }
                 }
             }
 
@@ -389,11 +401,11 @@
             $('#searchOpening').on('input', renderOpeningList);
             $('#clearArrowsBtn').click(() => { arrowCanvas.empty().prepend(defs); });
             $('.theme-btn').click(function() { applyTheme($(this).data('theme')); });
-            $('.piece-btn').click(function() { pieceStyle = $(this).data('style'); board.destroy(); initBoard(); loadOpening(currentOpeningKey); $('.piece-btn').removeClass('active'); $(this).addClass('active'); });
+            $('.piece-btn').click(function() { pieceStyle = $(this).data('style'); initBoard(false, game.fen()); loadOpening(currentOpeningKey); $('.piece-btn').removeClass('active'); $(this).addClass('active'); });
             $('#analysisBtn').on('click', getFullAnalysis);
 
             // --- INITIALIZATION ---
-            initBoard();
+            initBoard(false, 'start');
             renderOpeningList();
             loadOpening('e4:ruy-lopez');
         });
